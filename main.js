@@ -290,7 +290,7 @@ ipcMain.handle('decrypt-files', async (event, { inputPaths, password }) => {
       await decryptToFile(inputPath, password, outPath, (pct) => {
         event.sender.send('decrypt-progress', { index: i, total: inputPaths.length, file: inName, pct });
       });
-      results.push({ inputName: inName, outPath, ext: meta.ext });
+      results.push({ inputName: inName, displayName: stripExt(inName) + meta.ext, outPath, ext: meta.ext });
     } catch (e) {
       results.push({ inputName: inName, error: e.message });
     }

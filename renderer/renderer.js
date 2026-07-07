@@ -1,6 +1,8 @@
 // ---- State ----
-let encFiles = [];  // [{ path, name, size }]
-let decFiles = [];  // [{ path, name, size }]
+let encFiles = [];         // [{ path, name, size }]
+let decFiles = [];         // [{ path, name, size }]
+let encResultsCache = [];  // last encrypt results
+let decResultsCache = [];  // last decrypt results
 
 // ---- Tabs ----
 function switchTab(mode) {
@@ -148,10 +150,11 @@ async function doEncryptAll() {
 }
 
 function renderEncResults(results) {
+    encResultsCache = results;
     const list = document.getElementById('enc-result-list');
     list.innerHTML = '';
     if (!results.length) return;
-    results.forEach(r => {
+    results.forEach((r, idx) => {
         const row = document.createElement('div');
         row.className = 'result-row' + (r.error ? ' result-row--err' : '');
         if (r.error) {
@@ -160,19 +163,19 @@ function renderEncResults(results) {
                 <span class="result-name">${esc(r.inputName)}</span>
                 <span class="result-err">${esc(r.error)}</span>`;
         } else {
-            const p = r.outPath;
             row.innerHTML = `
                 <span class="result-icon ok">✓</span>
                 <span class="result-name">${esc(r.inputName)}</span>
                 <div class="result-btns">
-                    <button class="btn-secondary sm" onclick="showInFolderPath(${JSON.stringify(p)})">Show</button>
+                    <button class="btn-secondary sm" data-idx="${idx}">Show</button>
                 </div>`;
+            row.querySelector('[data-idx]').addEventListener('click', () => {
+                window.api.showInFolder(encResultsCache[idx].outPath);
+            });
         }
         list.appendChild(row);
     });
 }
-
-function showInFolderPath(p) { window.api.showInFolder(p); }
 
 // ---- Decrypt all ----
 async function doDecryptAll() {
@@ -206,10 +209,11 @@ async function doDecryptAll() {
 }
 
 function renderDecResults(results) {
+    decResultsCache = results;
     const list = document.getElementById('dec-result-list');
     list.innerHTML = '';
     if (!results.length) return;
-    results.forEach(r => {
+    results.forEach((r, idx) => {
         const row = document.createElement('div');
         row.className = 'result-row' + (r.error ? ' result-row--err' : '');
         if (r.error) {
@@ -218,21 +222,24 @@ function renderDecResults(results) {
                 <span class="result-name">${esc(r.inputName)}</span>
                 <span class="result-err">${esc(r.error)}</span>`;
         } else {
-            const p = r.outPath;
-            const ext = r.ext;
+            const label = r.displayName || r.inputName;
             row.innerHTML = `
                 <span class="result-icon ok">✓</span>
-                <span class="result-name">${esc(r.inputName)}</span>
+                <span class="result-name">${esc(label)}</span>
                 <div class="result-btns">
-                    <button class="btn-secondary sm" onclick="openResultPath(${JSON.stringify(p)})">Open</button>
-                    <button class="btn-secondary sm" onclick="saveResultPath(${JSON.stringify(p)}, ${JSON.stringify(ext)})">Save As…</button>
+                    <button class="btn-secondary sm" data-action="open" data-idx="${idx}">Open</button>
+                    <button class="btn-secondary sm" data-action="save" data-idx="${idx}">Save As…</button>
                 </div>`;
+            row.querySelector('[data-action="open"]').addEventListener('click', () => {
+                window.api.openPath(decResultsCache[idx].outPath);
+            });
+            row.querySelector('[data-action="save"]').addEventListener('click', () => {
+                saveResultPath(decResultsCache[idx].outPath, decResultsCache[idx].ext);
+            });
         }
         list.appendChild(row);
     });
 }
-
-function openResultPath(p) { window.api.openPath(p); }
 
 async function saveResultPath(p, ext) {
     try {
