@@ -12,7 +12,7 @@
     <header>
         <div class="logo">AES-256 · Native</div>
         <h1>VENC</h1>
-        <p>Encrypt any file so it cannot be opened without decryption</p>
+        <p>Encrypt any file — single or batch</p>
     </header>
 
     <div class="card">
@@ -23,15 +23,14 @@
 
         <!-- ENCRYPT PANEL -->
         <div class="panel active" id="panel-encrypt">
-            <div class="drop-zone" id="enc-drop" onclick="pickEncryptFile()">
+            <div class="drop-zone" id="enc-drop" onclick="pickEncryptFiles()">
                 <div class="drop-icon">▲</div>
-                <div class="drop-label">Click to choose any file</div>
-                <div class="drop-sub">any file type supported</div>
+                <div class="drop-label">Click to choose files</div>
+                <div class="drop-sub">any file type · multi-select supported</div>
             </div>
-            <div class="file-selected" id="enc-info">
-                <span class="fname" id="enc-fname"></span>
-                <span class="fsize" id="enc-fsize"></span>
-                <button class="clear-btn" onclick="clearFile('enc')">✕</button>
+            <div class="file-list-wrap" id="enc-file-list-wrap">
+                <div class="file-list" id="enc-file-list"></div>
+                <button class="add-more-btn" onclick="pickEncryptFiles(true)">+ Add more files</button>
             </div>
             <div class="field">
                 <label>Password</label>
@@ -48,27 +47,25 @@
                     <button class="pw-toggle" onclick="togglePw('enc-pw2', this)">show</button>
                 </div>
             </div>
+            <div class="batch-label" id="enc-batch-label"></div>
             <div class="progress-bar" id="enc-prog">
                 <div class="fill" id="enc-prog-fill"></div>
             </div>
             <div class="status" id="enc-status"></div>
-            <div class="video-actions" id="enc-actions">
-                <button class="btn-secondary" onclick="showInFolder('enc')">Show in Folder</button>
-            </div>
-            <button class="btn" id="enc-btn" onclick="doEncrypt()">Encrypt &amp; Save</button>
+            <div class="result-list" id="enc-result-list"></div>
+            <button class="btn" id="enc-btn" onclick="doEncryptAll()">⬡ Encrypt &amp; Save All</button>
         </div>
 
         <!-- DECRYPT PANEL -->
         <div class="panel" id="panel-decrypt">
-            <div class="drop-zone" id="dec-drop" onclick="pickDecryptFile()">
+            <div class="drop-zone" id="dec-drop" onclick="pickDecryptFiles()">
                 <div class="drop-icon">▽</div>
-                <div class="drop-label">Click to choose a .venc file</div>
-                <div class="drop-sub">.venc files only</div>
+                <div class="drop-label">Click to choose .venc files</div>
+                <div class="drop-sub">.venc files · multi-select supported</div>
             </div>
-            <div class="file-selected" id="dec-info">
-                <span class="fname" id="dec-fname"></span>
-                <span class="fsize" id="dec-fsize"></span>
-                <button class="clear-btn" onclick="clearFile('dec')">✕</button>
+            <div class="file-list-wrap" id="dec-file-list-wrap">
+                <div class="file-list" id="dec-file-list"></div>
+                <button class="add-more-btn" onclick="pickDecryptFiles(true)">+ Add more files</button>
             </div>
             <div class="field">
                 <label>Password</label>
@@ -78,19 +75,13 @@
                     <button class="pw-toggle" onclick="togglePw('dec-pw', this)">show</button>
                 </div>
             </div>
+            <div class="batch-label" id="dec-batch-label"></div>
             <div class="progress-bar" id="dec-prog">
                 <div class="fill" id="dec-prog-fill"></div>
             </div>
             <div class="status" id="dec-status"></div>
-            <div class="video-actions" id="dec-actions">
-                <button class="btn-secondary" onclick="saveCopy()">Save Copy As…</button>
-                <button class="btn-secondary" onclick="showInFolder('dec')">Show in Folder</button>
-            </div>
-            <div class="dec-primary-btns">
-                <button class="btn btn-half" id="dec-open-btn" onclick="doDecryptOpen()">⊙ Open</button>
-                <button class="btn btn-half btn-save" id="dec-save-btn" onclick="doDecryptSave()">⬇ Save As…</button>
-            </div>
-            <div class="drop-sub" style="text-align:center;">Opens with your OS default app · works for any file type</div>
+            <div class="result-list" id="dec-result-list"></div>
+            <button class="btn" id="dec-btn" onclick="doDecryptAll()">⬡ Decrypt All</button>
         </div>
     </div>
 

@@ -227,26 +227,75 @@ function decryptToFile(inputPath, password, outPath, onProgress) {
 
 ipcMain.handle('pick-encrypt-file', async () => {
   const r = await dialog.showOpenDialog({
-    properties: ['openFile'],
+    properties: ['openFile', 'multiSelections'],
     filters: [
       { name: 'All Files', extensions: ['*'] }
     ]
   });
-  if (r.canceled || !r.filePaths.length) return null;
-  const p = r.filePaths[0];
-  const stat = fs.statSync(p);
-  return { path: p, name: path.basename(p), size: stat.size };
+  if (r.canceled || !r.filePaths.length) return [];
+  return r.filePaths.map(p => ({ path: p, name: path.basename(p), size: fs.statSync(p).size }));
 });
 
 ipcMain.handle('pick-decrypt-file', async () => {
   const r = await dialog.showOpenDialog({
-    properties: ['openFile'],
+    properties: ['openFile', 'multiSelections'],
     filters: [{ name: 'VENC files', extensions: ['venc'] }]
   });
+  if (r.canceled || !r.filePaths.length) return [];
+  return r.filePaths.map(p => ({ path: p, name: path.basename(p), size: fs.statSync(p).size }));
+});
+
+ipcMain.handle('pick-output-dir', async () => {
+  const r = await dialog.showOpenDialog({
+    properties: ['openDirectory', 'createDirectory'],
+    title: 'Choose output folder for encrypted files'
+  });
   if (r.canceled || !r.filePaths.length) return null;
-  const p = r.filePaths[0];
-  const stat = fs.statSync(p);
-  return { path: p, name: path.basename(p), size: stat.size };
+  return r.filePaths[0];
+});
+
+ipcMain.handle('encrypt-files-to-dir', async (event, { inputPaths, password, outputDir }) => {
+  const results = [];
+  for (let i = 0; i < inputPaths.length; i++) {
+    const inputPath = inputPaths[i];
+    const inName = path.basename(inputPath);
+    const outPath = path.join(outputDir, stripExt(inName) + '.venc');
+    try {
+      await encryptToFile(inputPath, password, outPath, (pct) => {
+        event.sender.send('encrypt-progress', { index: i, total: inputPaths.length, file: inName, pct });
+      });
+      results.push({ inputName: inName, outPath });
+    } catch (e) {
+      results.push({ inputName: inName, error: e.message });
+    }
+  }
+  return results;
+});
+
+ipcMain.handle('decrypt-files', async (event, { inputPaths, password }) => {
+  const results = [];
+  for (let i = 0; i < inputPaths.length; i++) {
+    const inputPath = inputPaths[i];
+    const inName = path.basename(inputPath);
+    let meta;
+    try {
+      meta = readVencHeader(inputPath);
+    } catch (e) {
+      results.push({ inputName: inName, error: e.message });
+      continue;
+    }
+    const tmpName = `venc-preview-${Date.now()}-${i}`;
+    const outPath = path.join(os.tmpdir(), tmpName + meta.ext);
+    try {
+      await decryptToFile(inputPath, password, outPath, (pct) => {
+        event.sender.send('decrypt-progress', { index: i, total: inputPaths.length, file: inName, pct });
+      });
+      results.push({ inputName: inName, outPath, ext: meta.ext });
+    } catch (e) {
+      results.push({ inputName: inName, error: e.message });
+    }
+  }
+  return results;
 });
 
 ipcMain.handle('encrypt-file', async (event, { inputPath, password }) => {

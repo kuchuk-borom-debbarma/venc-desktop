@@ -403,3 +403,162 @@
         footer span {
             color: #444;
         }
+
+        /* ---- File list (multi-select) ---- */
+
+        .file-list-wrap {
+            display: none;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .file-list {
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .file-list::-webkit-scrollbar { width: 4px; }
+        .file-list::-webkit-scrollbar-track { background: var(--surface2); }
+        .file-list::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+        .flist-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .flist-row:last-child { border-bottom: none; }
+
+        .flist-name {
+            flex: 1;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .flist-size {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        .flist-remove {
+            background: none;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 11px;
+            padding: 2px 4px;
+            border-radius: 2px;
+            transition: color 0.15s;
+        }
+
+        .flist-remove:hover { color: var(--danger); }
+
+        .add-more-btn {
+            width: 100%;
+            background: none;
+            border: none;
+            border-top: 1px solid var(--border);
+            color: var(--accent);
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            padding: 9px 14px;
+            cursor: pointer;
+            text-align: left;
+            transition: background 0.15s;
+        }
+
+        .add-more-btn:hover { background: var(--surface2); }
+
+        /* ---- Batch progress label ---- */
+
+        .batch-label {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+            min-height: 14px;
+        }
+
+        /* ---- Results list ---- */
+
+        .result-list {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+            max-height: 240px;
+            overflow-y: auto;
+        }
+
+        .result-list:empty { display: none; }
+
+        .result-list::-webkit-scrollbar { width: 4px; }
+        .result-list::-webkit-scrollbar-track { background: var(--surface2); }
+        .result-list::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+        .result-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface2);
+        }
+
+        .result-row:last-child { border-bottom: none; }
+
+        .result-row--err { background: rgba(255, 77, 77, 0.04); }
+
+        .result-icon {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--danger);
+            flex-shrink: 0;
+            width: 14px;
+        }
+
+        .result-icon.ok { color: var(--accent); }
+
+        .result-name {
+            flex: 1;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .result-err {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--danger);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 180px;
+        }
+
+        .result-btns {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .btn-secondary.sm {
+            padding: 5px 10px;
+            font-size: 10px;
+            letter-spacing: 0.07em;
+        }
+
