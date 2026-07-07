@@ -1,0 +1,405 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap');
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #0a0a0a;
+            --surface: #111111;
+            --surface2: #1a1a1a;
+            --border: #2a2a2a;
+            --border2: #3a3a3a;
+            --text: #f0ede8;
+            --muted: #666;
+            --accent: #c8f04a;
+            --accent-dim: #8fb530;
+            --danger: #ff4d4d;
+            --mono: 'Space Mono', monospace;
+            --sans: 'DM Sans', sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--sans);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 48px 24px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        header .logo {
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 0.25em;
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        header h1 {
+            font-family: var(--mono);
+            font-size: 42px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text);
+            line-height: 1;
+        }
+
+        header p {
+            font-size: 14px;
+            color: var(--muted);
+            margin-top: 10px;
+            font-weight: 300;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 560px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab {
+            padding: 14px;
+            text-align: center;
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            cursor: pointer;
+            color: var(--muted);
+            background: none;
+            border: none;
+            transition: color 0.15s, background 0.15s;
+            position: relative;
+        }
+
+        .tab:first-child {
+            border-right: 1px solid var(--border);
+        }
+
+        .tab.active {
+            color: var(--accent);
+            background: var(--surface2);
+        }
+
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--accent);
+        }
+
+        .panel {
+            padding: 28px;
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .panel.active {
+            display: flex;
+        }
+
+        .drop-zone {
+            border: 1px dashed var(--border2);
+            border-radius: 2px;
+            padding: 36px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            position: relative;
+        }
+
+        .drop-zone:hover,
+        .drop-zone.drag-over {
+            border-color: var(--accent);
+            background: rgba(200, 240, 74, 0.03);
+        }
+
+        .drop-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        .drop-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: var(--muted);
+        }
+
+        .drop-label {
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            color: var(--muted);
+            text-transform: uppercase;
+        }
+
+        .drop-sub {
+            font-size: 12px;
+            color: #444;
+            margin-top: 6px;
+        }
+
+        .file-selected {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            font-size: 13px;
+        }
+
+        .file-selected .fname {
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--accent);
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .file-selected .fsize {
+            font-size: 11px;
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        .clear-btn {
+            background: none;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0 2px;
+            line-height: 1;
+            transition: color 0.15s;
+        }
+
+        .clear-btn:hover {
+            color: var(--danger);
+        }
+
+        .field label {
+            display: block;
+            font-family: var(--mono);
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+
+        .field input[type="password"],
+        .field input[type="text"] {
+            width: 100%;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            color: var(--text);
+            font-family: var(--mono);
+            font-size: 13px;
+            padding: 10px 14px;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+
+        .field input:focus {
+            border-color: var(--accent);
+        }
+
+        .pw-wrap {
+            position: relative;
+        }
+
+        .pw-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 13px;
+            padding: 0;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--accent);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 2px;
+            font-family: var(--mono);
+            font-size: 12px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            font-weight: 700;
+            transition: background 0.15s, transform 0.1s;
+        }
+
+        .btn:hover {
+            background: #d9ff52;
+        }
+
+        .btn:active {
+            transform: scale(0.99);
+        }
+
+        .btn:disabled {
+            background: var(--border2);
+            color: var(--muted);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .dec-primary-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-half {
+            flex: 1;
+            width: auto;
+        }
+
+        .btn-save {
+            background: none;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+
+        .btn-save:hover {
+            background: rgba(200, 240, 74, 0.1);
+        }
+
+        .btn-save:disabled {
+            background: none;
+            border-color: var(--border2);
+            color: var(--muted);
+        }
+
+        .status {
+            display: none;
+            padding: 12px 14px;
+            border-radius: 2px;
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 0.05em;
+            line-height: 1.5;
+        }
+
+        .status.error {
+            background: rgba(255, 77, 77, 0.08);
+            border: 1px solid rgba(255, 77, 77, 0.3);
+            color: #ff6b6b;
+        }
+
+        .status.success {
+            background: rgba(200, 240, 74, 0.06);
+            border: 1px solid rgba(200, 240, 74, 0.3);
+            color: var(--accent);
+        }
+
+        .status.working {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--muted);
+        }
+
+        .progress-bar {
+            display: none;
+            height: 2px;
+            background: var(--border);
+            border-radius: 1px;
+            overflow: hidden;
+        }
+
+        .progress-bar .fill {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.1s;
+        }
+
+        .video-player {
+            width: 100%;
+            display: none;
+            background: #000;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            max-height: 400px;
+        }
+
+        .video-actions {
+            display: none;
+            gap: 10px;
+        }
+
+        .btn-secondary {
+            flex: 1;
+            padding: 14px;
+            background: none;
+            color: var(--text);
+            border: 1px solid var(--border2);
+            border-radius: 2px;
+            font-family: var(--mono);
+            font-size: 12px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            font-weight: 700;
+            transition: border-color 0.15s, color 0.15s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        footer {
+            margin-top: 40px;
+            font-size: 11px;
+            color: #333;
+            font-family: var(--mono);
+            text-align: center;
+            letter-spacing: 0.08em;
+        }
+
+        footer span {
+            color: #444;
+        }

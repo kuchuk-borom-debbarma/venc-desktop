@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>VENC — File Encryptor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">AES-256 · Native</div>
+        <h1>VENC</h1>
+        <p>Encrypt any file so it cannot be opened without decryption</p>
+    </header>
+
+    <div class="card">
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('encrypt')">⬡ Encrypt</button>
+            <button class="tab" onclick="switchTab('decrypt')">⬡ Decrypt</button>
+        </div>
+
+        <!-- ENCRYPT PANEL -->
+        <div class="panel active" id="panel-encrypt">
+            <div class="drop-zone" id="enc-drop" onclick="pickEncryptFile()">
+                <div class="drop-icon">▲</div>
+                <div class="drop-label">Click to choose any file</div>
+                <div class="drop-sub">any file type supported</div>
+            </div>
+            <div class="file-selected" id="enc-info">
+                <span class="fname" id="enc-fname"></span>
+                <span class="fsize" id="enc-fsize"></span>
+                <button class="clear-btn" onclick="clearFile('enc')">✕</button>
+            </div>
+            <div class="field">
+                <label>Password</label>
+                <div class="pw-wrap">
+                    <input type="password" id="enc-pw" placeholder="Enter a strong password"
+                        autocomplete="new-password">
+                    <button class="pw-toggle" onclick="togglePw('enc-pw', this)">show</button>
+                </div>
+            </div>
+            <div class="field">
+                <label>Confirm password</label>
+                <div class="pw-wrap">
+                    <input type="password" id="enc-pw2" placeholder="Repeat password" autocomplete="new-password">
+                    <button class="pw-toggle" onclick="togglePw('enc-pw2', this)">show</button>
+                </div>
+            </div>
+            <div class="progress-bar" id="enc-prog">
+                <div class="fill" id="enc-prog-fill"></div>
+            </div>
+            <div class="status" id="enc-status"></div>
+            <div class="video-actions" id="enc-actions">
+                <button class="btn-secondary" onclick="showInFolder('enc')">Show in Folder</button>
+            </div>
+            <button class="btn" id="enc-btn" onclick="doEncrypt()">Encrypt &amp; Save</button>
+        </div>
+
+        <!-- DECRYPT PANEL -->
+        <div class="panel" id="panel-decrypt">
+            <div class="drop-zone" id="dec-drop" onclick="pickDecryptFile()">
+                <div class="drop-icon">▽</div>
+                <div class="drop-label">Click to choose a .venc file</div>
+                <div class="drop-sub">.venc files only</div>
+            </div>
+            <div class="file-selected" id="dec-info">
+                <span class="fname" id="dec-fname"></span>
+                <span class="fsize" id="dec-fsize"></span>
+                <button class="clear-btn" onclick="clearFile('dec')">✕</button>
+            </div>
+            <div class="field">
+                <label>Password</label>
+                <div class="pw-wrap">
+                    <input type="password" id="dec-pw" placeholder="Enter decryption password"
+                        autocomplete="current-password">
+                    <button class="pw-toggle" onclick="togglePw('dec-pw', this)">show</button>
+                </div>
+            </div>
+            <div class="progress-bar" id="dec-prog">
+                <div class="fill" id="dec-prog-fill"></div>
+            </div>
+            <div class="status" id="dec-status"></div>
+            <div class="video-actions" id="dec-actions">
+                <button class="btn-secondary" onclick="saveCopy()">Save Copy As…</button>
+                <button class="btn-secondary" onclick="showInFolder('dec')">Show in Folder</button>
+            </div>
+            <div class="dec-primary-btns">
+                <button class="btn btn-half" id="dec-open-btn" onclick="doDecryptOpen()">⊙ Open</button>
+                <button class="btn btn-half btn-save" id="dec-save-btn" onclick="doDecryptSave()">⬇ Save As…</button>
+            </div>
+            <div class="drop-sub" style="text-align:center;">Opens with your OS default app · works for any file type</div>
+        </div>
+    </div>
+
+    <footer>
+        AES-256-GCM · PBKDF2 / 250k iterations · <span>everything happens on this device — no uploads</span>
+    </footer>
+
+    <script src="renderer.js"></script>
+</body>
+
+</html>
